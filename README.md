@@ -16,7 +16,7 @@ npm install
 
 ## Todo
 
-* Create tests
+* Adapt tests
 * Handle the meta data (time-to-live, genreration)
 
 # Author

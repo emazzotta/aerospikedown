@@ -1,68 +1,88 @@
-const tap                  = require('tap')
-    , sinon                = require('sinon')
-    , util                 = require('util')
-    , testCommon           = require('./testCommon')
-    , AbstractLevelDOWN    = require('./').AbstractLevelDOWN
-    , AbstractIterator     = require('./').AbstractIterator
-    , AbstractChainedBatch = require('./').AbstractChainedBatch;
+var test                 = require('tape')
+  , sinon                = require('sinon')
+  , util                 = require('util')
+  , testCommon           = require('./testCommon')
+  , AbstractLevelDOWN    = require('./').AbstractLevelDOWN
+  , AbstractIterator     = require('./').AbstractIterator
+  , AbstractChainedBatch = require('./').AbstractChainedBatch
+  , isLevelDOWN          = require('./').isLevelDOWN
 
 function factory (location) {
   return new AbstractLevelDOWN(location)
 }
 
-require('./abstract/leveldown-test').args(factory, tap.test, testCommon);
-require('./abstract/open-test').args(factory, tap.test, testCommon);
-require('./abstract/del-test').setUp(factory, tap.test, testCommon);
-require('./abstract/del-test').args(tap.test);
-require('./abstract/get-test').setUp(factory, tap.test, testCommon);
-require('./abstract/get-test').args(tap.test);
-require('./abstract/put-test').setUp(factory, tap.test, testCommon);
-require('./abstract/put-test').args(tap.test);
-require('./abstract/put-get-del-test').setUp(factory, tap.test, testCommon);
-require('./abstract/put-get-del-test').errorKeys(tap.test);
-require('./abstract/put-get-del-test').errorValues(tap.test);
-require('./abstract/put-get-del-test').tearDown(tap.test, testCommon);
-require('./abstract/approximate-size-test').setUp(factory, tap.test, testCommon);
-require('./abstract/approximate-size-test').args(tap.test);
-require('./abstract/batch-test').setUp(factory, tap.test, testCommon);
-require('./abstract/batch-test').args(tap.test);
-require('./abstract/chained-batch-test').setUp(factory, tap.test, testCommon);
-require('./abstract/chained-batch-test').args(tap.test);
-require('./abstract/close-test').close(factory, tap.test, testCommon);
-require('./abstract/iterator-test').setUp(factory, tap.test, testCommon);
-require('./abstract/iterator-test').args(tap.test);
-require('./abstract/iterator-test').sequence(tap.test);
+/*** compatibility with basic LevelDOWN API ***/
 
-tap.test('test core extensibility', function (t) {
+require('./abstract/leveldown-test').args(factory, test, testCommon)
+
+require('./abstract/open-test').args(factory, test, testCommon)
+
+require('./abstract/del-test').setUp(factory, test, testCommon)
+require('./abstract/del-test').args(test)
+
+require('./abstract/get-test').setUp(factory, test, testCommon)
+require('./abstract/get-test').args(test)
+
+require('./abstract/put-test').setUp(factory, test, testCommon)
+require('./abstract/put-test').args(test)
+
+require('./abstract/put-get-del-test').setUp(factory, test, testCommon)
+require('./abstract/put-get-del-test').errorKeys(test)
+//require('./abstract/put-get-del-test').nonErrorKeys(test, testCommon)
+require('./abstract/put-get-del-test').errorValues(test)
+//require('./abstract/test/put-get-del-test').nonErrorKeys(test, testCommon)
+require('./abstract/put-get-del-test').tearDown(test, testCommon)
+
+require('./abstract/approximate-size-test').setUp(factory, test, testCommon)
+require('./abstract/approximate-size-test').args(test)
+
+require('./abstract/batch-test').setUp(factory, test, testCommon)
+require('./abstract/batch-test').args(test)
+
+require('./abstract/chained-batch-test').setUp(factory, test, testCommon)
+require('./abstract/chained-batch-test').args(test)
+
+require('./abstract/close-test').close(factory, test, testCommon)
+
+require('./abstract/iterator-test').setUp(factory, test, testCommon)
+require('./abstract/iterator-test').args(test)
+require('./abstract/iterator-test').sequence(test)
+
+/*** extensibility ***/
+
+test('test core extensibility', function (t) {
   function Test (location) {
-    AbstractLevelDOWN.call(this, location);
-    t.equal(this.location, location, 'location set on `this`');
+    AbstractLevelDOWN.call(this, location)
+    t.equal(this.location, location, 'location set on `this`')
     t.end()
   }
-});
 
-tap.test('test open() extensibility', function (t) {
+  util.inherits(Test, AbstractLevelDOWN)
+
+  ;new Test('foobar')
+})
+
+test('test open() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedCb = function () {}
     , expectedOptions = { createIfMissing: true, errorIfExists: false }
-    , test;
+    , test
 
   function Test (location) {
     AbstractLevelDOWN.call(this, location)
   }
 
-  util.inherits(Test, AbstractLevelDOWN);
+  util.inherits(Test, AbstractLevelDOWN)
 
-  Test.prototype._open = spy;
+  Test.prototype._open = spy
 
-  test = new Test('foobar');
-  test.open(expectedCb);
+  test = new Test('foobar')
+  test.open(expectedCb)
 
-  t.equal(spy.callCount, 1, 'got _open() call');
-  t.equal(spy.getCall(0).thisValue, test, '`this` on _open() was correct');
-  t.equal(spy.getCall(0).args.length, 2, 'got two arguments');
+  t.equal(spy.callCount, 1, 'got _open() call')
+  t.equal(spy.getCall(0).thisValue, test, '`this` on _open() was correct')
+  t.equal(spy.getCall(0).args.length, 2, 'got two arguments')
   t.deepEqual(spy.getCall(0).args[0], expectedOptions, 'got default options argument')
-  t.equal(spy.getCall(0).args[1], expectedCb, 'got expected cb argument')
 
   test.open({ options: 1 }, expectedCb)
 
@@ -72,11 +92,10 @@ tap.test('test open() extensibility', function (t) {
   t.equal(spy.getCall(1).thisValue, test, '`this` on _open() was correct')
   t.equal(spy.getCall(1).args.length, 2, 'got two arguments')
   t.deepEqual(spy.getCall(1).args[0], expectedOptions, 'got expected options argument')
-  t.equal(spy.getCall(1).args[1], expectedCb, 'got expected cb argument')
   t.end()
 })
 
-tap.test('test close() extensibility', function (t) {
+test('test close() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedCb = function () {}
     , test
@@ -95,11 +114,10 @@ tap.test('test close() extensibility', function (t) {
   t.equal(spy.callCount, 1, 'got _close() call')
   t.equal(spy.getCall(0).thisValue, test, '`this` on _close() was correct')
   t.equal(spy.getCall(0).args.length, 1, 'got one arguments')
-  t.equal(spy.getCall(0).args[0], expectedCb, 'got expected cb argument')
   t.end()
 })
 
-tap.test('test get() extensibility', function (t) {
+test('test get() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedCb = function () {}
     , expectedOptions = { asBuffer: true }
@@ -137,7 +155,7 @@ tap.test('test get() extensibility', function (t) {
   t.end()
 })
 
-tap.test('test del() extensibility', function (t) {
+test('test del() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedCb = function () {}
     , expectedOptions = { options: 1 }
@@ -173,7 +191,7 @@ tap.test('test del() extensibility', function (t) {
   t.end()
 })
 
-tap.test('test put() extensibility', function (t) {
+test('test put() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedCb = function () {}
     , expectedOptions = { options: 1 }
@@ -212,7 +230,7 @@ tap.test('test put() extensibility', function (t) {
   t.end()
 })
 
-tap.test('test approximateSize() extensibility', function (t) {
+test('test approximateSize() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedCb = function () {}
     , expectedStart = 'a start'
@@ -239,7 +257,7 @@ tap.test('test approximateSize() extensibility', function (t) {
   t.end()
 })
 
-tap.test('test batch() extensibility', function (t) {
+test('test batch() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedCb = function () {}
     , expectedOptions = { options: 1 }
@@ -285,7 +303,7 @@ tap.test('test batch() extensibility', function (t) {
   t.end()
 })
 
-tap.test('test chained batch() (array) extensibility', function (t) {
+test('test chained batch() (array) extensibility', function (t) {
   var spy = sinon.spy()
     , expectedCb = function () {}
     , expectedOptions = { options: 1 }
@@ -327,7 +345,7 @@ tap.test('test chained batch() (array) extensibility', function (t) {
   t.end()
 })
 
-tap.test('test chained batch() (custom _chainedBatch) extensibility', function (t) {
+test('test chained batch() (custom _chainedBatch) extensibility', function (t) {
   var spy = sinon.spy()
     , test
 
@@ -354,7 +372,7 @@ tap.test('test chained batch() (custom _chainedBatch) extensibility', function (
   t.end()
 })
 
-tap.test('test AbstractChainedBatch extensibility', function (t) {
+test('test AbstractChainedBatch extensibility', function (t) {
   function Test (db) {
     AbstractChainedBatch.call(this, db)
     t.equal(this._db, db, 'db set on `this`')
@@ -366,7 +384,7 @@ tap.test('test AbstractChainedBatch extensibility', function (t) {
   new Test('foobar')
 })
 
-tap.test('test write() extensibility', function (t) {
+test('test write() extensibility', function (t) {
   var spy = sinon.spy()
     , spycb = sinon.spy()
     , test
@@ -386,14 +404,14 @@ tap.test('test write() extensibility', function (t) {
   t.equal(spy.getCall(0).thisValue, test, '`this` on _write() was correct')
   t.equal(spy.getCall(0).args.length, 1, 'got one argument')
   // awkward here cause of nextTick & an internal wrapped cb
-  t.type(spy.getCall(0).args[0], 'function', 'got a callback function')
+  t.equal(typeof spy.getCall(0).args[0], 'function', 'got a callback function')
   t.equal(spycb.callCount, 0, 'spycb not called')
   spy.getCall(0).args[0]()
   t.equal(spycb.callCount, 1, 'spycb called, i.e. was our cb argument')
   t.end()
 })
 
-tap.test('test put() extensibility', function (t) {
+test('test put() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedKey = 'key'
     , expectedValue = 'value'
@@ -419,7 +437,7 @@ tap.test('test put() extensibility', function (t) {
   t.end()
 })
 
-tap.test('test del() extensibility', function (t) {
+test('test del() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedKey = 'key'
     , returnValue
@@ -443,7 +461,7 @@ tap.test('test del() extensibility', function (t) {
   t.end()
 })
 
-tap.test('test clear() extensibility', function (t) {
+test('test clear() extensibility', function (t) {
   var spy = sinon.spy()
     , returnValue
     , test
@@ -465,7 +483,7 @@ tap.test('test clear() extensibility', function (t) {
   t.end()
 })
 
-tap.test('test iterator() extensibility', function (t) {
+test('test iterator() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedOptions = { options: 1, reverse: false, keys: true, values: true, limit: -1, keyAsBuffer: true, valueAsBuffer: true }
     , test
@@ -488,7 +506,7 @@ tap.test('test iterator() extensibility', function (t) {
   t.end()
 })
 
-tap.test('test AbstractIterator extensibility', function (t) {
+test('test AbstractIterator extensibility', function (t) {
   function Test (db) {
     AbstractIterator.call(this, db)
     t.equal(this.db, db, 'db set on `this`')
@@ -500,7 +518,7 @@ tap.test('test AbstractIterator extensibility', function (t) {
   ;new Test('foobar')
 })
 
-tap.test('test next() extensibility', function (t) {
+test('test next() extensibility', function (t) {
   var spy = sinon.spy()
     , spycb = sinon.spy()
     , test
@@ -520,14 +538,14 @@ tap.test('test next() extensibility', function (t) {
   t.equal(spy.getCall(0).thisValue, test, '`this` on _next() was correct')
   t.equal(spy.getCall(0).args.length, 1, 'got one arguments')
   // awkward here cause of nextTick & an internal wrapped cb
-  t.type(spy.getCall(0).args[0], 'function', 'got a callback function')
+  t.equal(typeof spy.getCall(0).args[0], 'function', 'got a callback function')
   t.equal(spycb.callCount, 0, 'spycb not called')
   spy.getCall(0).args[0]()
   t.equal(spycb.callCount, 1, 'spycb called, i.e. was our cb argument')
   t.end()
 })
 
-tap.test('test end() extensibility', function (t) {
+test('test end() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedCb = function () {}
     , test
@@ -548,4 +566,149 @@ tap.test('test end() extensibility', function (t) {
   t.equal(spy.getCall(0).args.length, 1, 'got one arguments')
   t.equal(spy.getCall(0).args[0], expectedCb, 'got expected cb argument')
   t.end()
+})
+
+test('isLevelDOWN', function (t) {
+  t.notOk(isLevelDOWN(), 'is not a leveldown')
+  t.notOk(isLevelDOWN(''), 'is not a leveldown')
+  t.notOk(isLevelDOWN({}), 'is not a leveldown')
+  t.notOk(isLevelDOWN({ put: function () {} }), 'is not a leveldown')
+  t.ok(isLevelDOWN(new AbstractLevelDOWN('location')), 'IS a leveldown')
+  t.ok(isLevelDOWN({
+    open: function () {},
+    close: function () {},
+    get: function () {},
+    put: function () {},
+    del: function () {},
+    batch: function () {},
+    iterator: function () {}
+  }), 'IS a leveldown')
+  t.ok(isLevelDOWN({
+    open: function () {},
+    close: function () {},
+    get: function () {},
+    put: function () {},
+    del: function () {},
+    batch: function () {},
+    approximateSize: function () {},
+    iterator: function () {}
+  }), 'IS also a leveldown')
+  t.end()
+})
+
+test('.status', function (t) {
+  t.test('empty prototype', function (t) {
+    var test
+
+    function Test (location) {
+      AbstractLevelDOWN.call(this, location)
+    }
+
+    util.inherits(Test, AbstractLevelDOWN)
+
+    test = new Test('foobar')
+    t.equal(test.status, 'new')
+
+    test.open(function (err) {
+      t.error(err)
+      t.equal(test.status, 'open')
+
+      test.close(function (err) {
+        t.error(err)
+        t.equal(test.status, 'closed')
+        t.end()
+      })
+    })
+  })
+
+  t.test('open error', function (t) {
+    var test
+
+    function Test (location) {
+      AbstractLevelDOWN.call(this, location)
+    }
+
+    util.inherits(Test, AbstractLevelDOWN)
+
+    Test.prototype._open = function (options, cb) {
+      cb(new Error)
+    }
+
+    test = new Test('foobar')
+    test.open(function (err) {
+      t.ok(err)
+      t.equal(test.status, 'new')
+      t.end()
+    })
+  })
+
+  t.test('close error', function (t) {
+    var test
+
+    function Test (location) {
+      AbstractLevelDOWN.call(this, location)
+    }
+
+    util.inherits(Test, AbstractLevelDOWN)
+
+    Test.prototype._close = function (cb) {
+      cb(new Error)
+    }
+
+    test = new Test('foobar')
+    test.open(function () {
+      test.close(function (err) {
+        t.ok(err)
+        t.equal(test.status, 'open')
+        t.end()
+      })
+    })
+  })
+
+  t.test('open', function (t) {
+    var test
+
+    function Test (location) {
+      AbstractLevelDOWN.call(this, location)
+    }
+
+    util.inherits(Test, AbstractLevelDOWN)
+
+    Test.prototype._open = function (options, cb) {
+      process.nextTick(cb)
+    }
+
+    test = new Test('foobar')
+    test.open(function (err) {
+      t.error(err)
+      t.equal(test.status, 'open')
+      t.end()
+    })
+    t.equal(test.status, 'opening')
+  })
+
+  t.test('close', function (t) {
+    var test
+
+    function Test (location) {
+      AbstractLevelDOWN.call(this, location)
+    }
+
+    util.inherits(Test, AbstractLevelDOWN)
+
+    Test.prototype._close = function (cb) {
+      process.nextTick(cb)
+    }
+
+    test = new Test('foobar')
+    test.open(function (err) {
+      t.error(err)
+      test.close(function (err) {
+        t.error(err)
+        t.equal(test.status, 'closed')
+        t.end()
+      })
+      t.equal(test.status, 'closing')
+    })
+  })
 })

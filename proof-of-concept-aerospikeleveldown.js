@@ -3,13 +3,13 @@ var status = aerospike.status;
 var util = require('util'), AbstractLevelDOWN = require('./').AbstractLevelDOWN;
 
 // constructor, passes through the 'location' argument to the AbstractLevelDOWN constructor
-function FakeLevelDOWN (location) {
+function AerospikeLevelDOWN (location) {
     AbstractLevelDOWN.call(this, location)
 }
 // our new prototype inherits from AbstractLevelDOWN
-util.inherits(FakeLevelDOWN, AbstractLevelDOWN);
+util.inherits(AerospikeLevelDOWN, AbstractLevelDOWN);
 
-FakeLevelDOWN.prototype._open = function (options, callback) {
+AerospikeLevelDOWN.prototype._open = function (options, callback) {
     this._client = aerospike.client({
         hosts: [ { addr: '127.0.0.1', port: 3000 } ]
     });
@@ -22,7 +22,7 @@ FakeLevelDOWN.prototype._open = function (options, callback) {
     process.nextTick(function () { callback(null, this) }.bind(this))
 };
 
-FakeLevelDOWN.prototype._put = function (key, value, options, callback) {
+AerospikeLevelDOWN.prototype._put = function (key, value, options, callback) {
     var aero_key = aerospike.key('test','demo','_' + key);
     var bins = {'value': value};
     var metadata = { ttl: 10000, gen: 1};
@@ -31,7 +31,7 @@ FakeLevelDOWN.prototype._put = function (key, value, options, callback) {
     process.nextTick(callback)
 };
 
-FakeLevelDOWN.prototype._get = function (key, options, callback) {
+AerospikeLevelDOWN.prototype._get = function (key, options, callback) {
     var aero_key = aerospike.key('test','demo','_' + key);
 
     this._client.get(aero_key, function(err, rec, meta) {
@@ -46,7 +46,7 @@ FakeLevelDOWN.prototype._get = function (key, options, callback) {
     });
 };
 
-FakeLevelDOWN.prototype._del = function (key, options, callback) {
+AerospikeLevelDOWN.prototype._del = function (key, options, callback) {
     var aero_key = aerospike.key('test','demo','_' + key);
 
     client.remove(aero_key, function (err, key) {
@@ -60,7 +60,7 @@ FakeLevelDOWN.prototype._del = function (key, options, callback) {
 
 var levelup = require('levelup');
 var db = levelup('/who/cares/', {
-    db: function (location) { return new FakeLevelDOWN(location) }
+    db: function (location) { return new AerospikeLevelDOWN(location) }
 });
 db.put('foo', 'bar', function (err) {
     if (err) throw err;
