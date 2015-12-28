@@ -1,6 +1,7 @@
 var aerospike = require('aerospike');
 var status = aerospike.status;
-var util = require('util'), AbstractLevelDOWN = require('./').AbstractLevelDOWN;
+var util = require('util');
+var AbstractLevelDOWN = require('./').AbstractLevelDOWN;
 
 // constructor, passes through the 'location' argument to the AbstractLevelDOWN constructor
 function AerospikeLevelDOWN (location) {
@@ -57,15 +58,4 @@ AerospikeLevelDOWN.prototype._del = function (key, options, callback) {
     });
 };
 
-
-var levelup = require('levelup');
-var db = levelup('/who/cares/', {
-    db: function (location) { return new AerospikeLevelDOWN(location) }
-});
-db.put('foo', 'bar', function (err) {
-    if (err) throw err;
-    db.get('foo', function (err, value) {
-        if (err) throw err;
-        console.log('Got foo =', value)
-    })
-});
+module.exports = AerospikeLevelDOWN
