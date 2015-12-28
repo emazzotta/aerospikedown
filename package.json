@@ -1,0 +1,36 @@
+{
+  "name": "aerospikedown",
+  "description": "A LevelDOWN API compatible Couchbase adapter for LevelUP",
+  "version": "0.0.1",
+  "author": {
+    "name": "Shimon Schwartz",
+    "email": "shimonenator@gmail.com",
+    "url": "https://github.com/shimonenator"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shimonenator/aerospikedown.git"
+  },
+  "homepage": "https://github.com/shimonenator/aerospikedown",
+  "bugs": "https://github.com/shimonenator/aerospikedown/issues",
+  "keywords": [
+    "couchbase",
+    "leveldown",
+    "levelup"
+  ],
+  "main": "index.js",
+  "dependencies": {
+    "abstract-leveldown": "~2.0.0",
+    "aerospike": "^1.0.53",
+    "couchbase": "~2.0.0"
+  },
+  "devDependencies": {
+    "tap": "*",
+    "sinon": "*",
+    "rimraf": "*"
+  },
+  "scripts": {
+    "test": "node ./test.js"
+  },
+  "license": "MIT"
+}
