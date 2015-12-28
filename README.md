@@ -10,8 +10,7 @@ For more info see:
 
 # How to Use
 
-```
-#!sh
+```sh
 npm install
 ```
 
