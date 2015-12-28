@@ -5,112 +5,90 @@ var aerospike = require('aerospike');
 var status = aerospike.status;
 
 function AerospikeDOWN(location) {
-	if (!(this instanceof AerospikeDOWN)) {
-		return new AerospikeDOWN(location);
-	}
+    if (!(this instanceof AerospikeDOWN)) {
+        return new AerospikeDOWN(location);
+    }
 
-	AbstractLevelDOWN.call(this, location);
+    AbstractLevelDOWN.call(this, location);
 }
 
 AerospikeDOWN.prototype = Object.create(AbstractLevelDOWN.prototype, {
-	constructor: {
-		configurable: true,
-		enumerable: true,
-		value: AerospikeDOWN,
-		writable: true
-	},
+    constructor: {
+        configurable: true,
+        enumerable: true,
+        value: AerospikeDOWN,
+        writable: true
+    },
 
-	_cluster:	null,
-	_manager:	null,
-	_bucket:	null,
+    _client: null,
 
-	_open: function (options, callback) {
-		var self = this, manager;
+    _open: function(options, callback) {
+        this._client = aerospike.client({
+            hosts: [ { addr: '127.0.0.1', port: 3000 } ]
+        });
+        function connect_cb(err, client) {
+            if (err.code != status.AEROSPIKE_OK) {
+                return process.nextTick(function () {
+                    callback(new Error('Aerospike connection failed'))
+                })
+            }
+        }
+        this._client.connect(connect_cb);
+        process.nextTick(function () { callback(null, this) }.bind(this))
+    },
 
-		if (!this._cluster) {
-			this._cluster = new couchbase.Cluster(location);
-		}
+    _close: function(callback) {
+        this._client = null;
+        process.nextTick(callback)
+    },
 
-		if (options.createIfMissing || options.errorIfExists) {
-			if (!options.adminUser) {
-				throw new Error('Couchbase adminUser is not set');
-			}
+    _get: function(key, options, callback) {
+        var aero_key = aerospike.key('test','demo','_' + key);
 
-			if (!options.adminPass) {
-				throw new Error('Couchbase adminPass is not set');
-			}
-			
-			manager = this._cluster.manager(options.adminUser, options.adminPass);
+        this._client.get(aero_key, function(err, rec, meta) {
+            console.log(rec.value);
+            if ( err.code != status.AEROSPIKE_OK ) {
+                return process.nextTick(function () {
+                    callback(new Error('NotFound'))
+                })
+            } else {
+                return process.nextTick(function () {
+                    callback(null, rec.value)
+                });
+            }
+        });
+    },
 
-			manager.listBuckets(function (err, bucketInfo) {
-				if (err) {
-					process.nextTick(function () {
-						callback(err);
-					});
+    _put: function(key, value, options, callback) {
+        var aero_key = aerospike.key('test','demo','_' + key);
+        var bins = {'value': value};
+        var metadata = { ttl: 10000, gen: 1};
+        this._client.put(aero_key, bins, metadata, function(err, key){
+            if (err.code !== status.AEROSPIKE_OK) {
+                return process.nextTick(function() {
+                    callback(new Error('Failed to insert ' + key + ': ' + err.message))
+                });
+            }
+        });
+        process.nextTick(callback)
+    },
 
-					return;
-				}
+    _del: function(key, options, callback) {
+        var aero_key = aerospike.key('test', 'demo', '_' + key);
 
-				if (bucketInfo.indexOf(options.bucket) >= 0) {
-					if (options.errorIfExists) {
-						throw new Error('Bucket ' + options.bucket + ' already exists');
-					}
-				} else {
-					if (options.createIfMissing) {
-						manager.createBucket(options.bucket)
-					} else {
-						throw new Error('Bucket ' + options.bucket + ' doesn\'t exist');
-					}
-				}
+        this._client.remove(aero_key, function(err, key) {
+            if (err.code !== status.AEROSPIKE_OK) {
+                return process.nextTick(function() {
+                    callback(new Error('Failed to remove ' + key + ': ' + err.message))
+                });
+            }
+            process.nextTick(callback)
+        });
+    },
 
-				self._openBucket(options.bucket, options.pass, callback);
-			});
-		} else {
-			self._openBucket(options.bucket, options.pass, callback);
-		}
-	},
-
-	_openBucket: function (bucket, password, callback) {
-		var self = this;
-
-		process.nextTick(function () {
-			self._bucket = self._cluster.openBucket(bucket || null, password || null, callback);
-		});
-	},
-
-	_close: function (callback) {
-		this._bucket.disconnect();
-
-		process.nextTick(callback)
-	},
-
-	_get: function (key, options, callback) {
-		if (!options.couchbase) {
-			options.couchbase = {};
-		}
-
-		this._bucket.get(key, options.couchbase, callback);
-	},
-
-	_put: function (key, value, options, callback) {
-		if (!options.couchbase) {
-			options.couchbase = {};
-		}
-
-		this._bucket.upsert(key, value, options.couchbase, callback);
-	},
-
-	_del: function (key, options, callback) {
-		if (!options.couchbase) {
-			options.couchbase = {};
-		}
-
-		this._bucket.remove(key, options.couchbase, callback);
-	},
-
-	_batch: function (array, options, callback) {
-		throw new Error('batch() not implemented');
-	}
+    _batch: function(array, options, callback) {
+        throw new Error('batch() not implemented');
+    }
 });
 
 module.exports.AerospikeDOWN = AerospikeDOWN;

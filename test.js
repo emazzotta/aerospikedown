@@ -4,83 +4,63 @@ const tap                  = require('tap')
     , testCommon           = require('./testCommon')
     , AbstractLevelDOWN    = require('./').AbstractLevelDOWN
     , AbstractIterator     = require('./').AbstractIterator
-    , AbstractChainedBatch = require('./').AbstractChainedBatch
+    , AbstractChainedBatch = require('./').AbstractChainedBatch;
 
 function factory (location) {
   return new AbstractLevelDOWN(location)
 }
 
-/*** compatibility with basic LevelDOWN API ***/
-
-require('./abstract/leveldown-test').args(factory, tap.test, testCommon)
-
-require('./abstract/open-test').args(factory, tap.test, testCommon)
-
-require('./abstract/del-test').setUp(factory, tap.test, testCommon)
-require('./abstract/del-test').args(tap.test)
-
-require('./abstract/get-test').setUp(factory, tap.test, testCommon)
-require('./abstract/get-test').args(tap.test)
-
-require('./abstract/put-test').setUp(factory, tap.test, testCommon)
-require('./abstract/put-test').args(tap.test)
-
-require('./abstract/put-get-del-test').setUp(factory, tap.test, testCommon)
-require('./abstract/put-get-del-test').errorKeys(tap.test)
-//require('./abstract/put-get-del-test').nonErrorKeys(tap.test, testCommon)
-require('./abstract/put-get-del-test').errorValues(tap.test)
-//require('./abstract/test/put-get-del-test').nonErrorKeys(tap.test, testCommon)
-require('./abstract/put-get-del-test').tearDown(tap.test, testCommon)
-
-require('./abstract/approximate-size-test').setUp(factory, tap.test, testCommon)
-require('./abstract/approximate-size-test').args(tap.test)
-
-require('./abstract/batch-test').setUp(factory, tap.test, testCommon)
-require('./abstract/batch-test').args(tap.test)
-
-require('./abstract/chained-batch-test').setUp(factory, tap.test, testCommon)
-require('./abstract/chained-batch-test').args(tap.test)
-
-require('./abstract/close-test').close(factory, tap.test, testCommon)
-
-require('./abstract/iterator-test').setUp(factory, tap.test, testCommon)
-require('./abstract/iterator-test').args(tap.test)
-require('./abstract/iterator-test').sequence(tap.test)
-
-/*** extensibility ***/
+require('./abstract/leveldown-test').args(factory, tap.test, testCommon);
+require('./abstract/open-test').args(factory, tap.test, testCommon);
+require('./abstract/del-test').setUp(factory, tap.test, testCommon);
+require('./abstract/del-test').args(tap.test);
+require('./abstract/get-test').setUp(factory, tap.test, testCommon);
+require('./abstract/get-test').args(tap.test);
+require('./abstract/put-test').setUp(factory, tap.test, testCommon);
+require('./abstract/put-test').args(tap.test);
+require('./abstract/put-get-del-test').setUp(factory, tap.test, testCommon);
+require('./abstract/put-get-del-test').errorKeys(tap.test);
+require('./abstract/put-get-del-test').errorValues(tap.test);
+require('./abstract/put-get-del-test').tearDown(tap.test, testCommon);
+require('./abstract/approximate-size-test').setUp(factory, tap.test, testCommon);
+require('./abstract/approximate-size-test').args(tap.test);
+require('./abstract/batch-test').setUp(factory, tap.test, testCommon);
+require('./abstract/batch-test').args(tap.test);
+require('./abstract/chained-batch-test').setUp(factory, tap.test, testCommon);
+require('./abstract/chained-batch-test').args(tap.test);
+require('./abstract/close-test').close(factory, tap.test, testCommon);
+require('./abstract/iterator-test').setUp(factory, tap.test, testCommon);
+require('./abstract/iterator-test').args(tap.test);
+require('./abstract/iterator-test').sequence(tap.test);
 
 tap.test('test core extensibility', function (t) {
   function Test (location) {
-    AbstractLevelDOWN.call(this, location)
-    t.equal(this.location, location, 'location set on `this`')
+    AbstractLevelDOWN.call(this, location);
+    t.equal(this.location, location, 'location set on `this`');
     t.end()
   }
-
-  util.inherits(Test, AbstractLevelDOWN)
-
-  ;new Test('foobar')
-})
+});
 
 tap.test('test open() extensibility', function (t) {
   var spy = sinon.spy()
     , expectedCb = function () {}
     , expectedOptions = { createIfMissing: true, errorIfExists: false }
-    , test
+    , test;
 
   function Test (location) {
     AbstractLevelDOWN.call(this, location)
   }
 
-  util.inherits(Test, AbstractLevelDOWN)
+  util.inherits(Test, AbstractLevelDOWN);
 
-  Test.prototype._open = spy
+  Test.prototype._open = spy;
 
-  test = new Test('foobar')
-  test.open(expectedCb)
+  test = new Test('foobar');
+  test.open(expectedCb);
 
-  t.equal(spy.callCount, 1, 'got _open() call')
-  t.equal(spy.getCall(0).thisValue, test, '`this` on _open() was correct')
-  t.equal(spy.getCall(0).args.length, 2, 'got two arguments')
+  t.equal(spy.callCount, 1, 'got _open() call');
+  t.equal(spy.getCall(0).thisValue, test, '`this` on _open() was correct');
+  t.equal(spy.getCall(0).args.length, 2, 'got two arguments');
   t.deepEqual(spy.getCall(0).args[0], expectedOptions, 'got default options argument')
   t.equal(spy.getCall(0).args[1], expectedCb, 'got expected cb argument')
 
