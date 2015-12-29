@@ -10,8 +10,36 @@ For more info see:
 
 # How to Use
 
-```sh
-npm install
+The LevelUp package will be needed for this to work.
+
+Example:
+
+```js
+var AerospikeLevelDOWN = require('aerospike-leveldown').AerospikeLevelDOWN;
+var levelup = require('levelup');
+
+var databaseOptions = {
+    address: '127.0.0.1',
+    port: 3000,
+    namespace: 'test',
+    set: 'anything'
+};
+
+var db = levelup('/who/cares/', {
+    db: function (location) {
+        return new AerospikeLevelDOWN(location)
+    },
+    address: databaseOptions.address,
+    port: databaseOptions.port
+});
+
+db.put('foo', 'bar', databaseOptions, function (err) {
+    if (err) throw err;
+    db.get('foo', databaseOptions, function (err, result) {
+        if (err) throw err;
+        console.log('Got foo =', result.value)
+    })
+});
 ```
 
 ## Todo
