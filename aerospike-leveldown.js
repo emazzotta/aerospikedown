@@ -26,7 +26,14 @@ AerospikeLevelDOWN.prototype._open = function (options, callback) {
 AerospikeLevelDOWN.prototype._put = function (key, value, options, callback) {
     var aero_key = aerospike.key('test','demo','_' + key);
     var bins = {'value': value};
-    var metadata = { ttl: 10000, gen: 1};
+    var metadata = {};
+    if(options.ttl != undefined) {
+        metadata.ttl = options.ttl;
+    }
+    if(options.gen != undefined) {
+        metadata.gen = options.gen
+    }
+
     this._client.put(aero_key, bins, metadata, function(err, key){
     });
     process.nextTick(callback)
@@ -36,12 +43,13 @@ AerospikeLevelDOWN.prototype._get = function (key, options, callback) {
     var aero_key = aerospike.key('test','demo','_' + key);
 
     this._client.get(aero_key, function(err, rec, meta) {
-        console.log(rec.value);
         if ( err.code != status.AEROSPIKE_OK ) {
-            return process.nextTick(function () { callback(new Error('NotFound')) })
+            return process.nextTick(function () {
+                callback(new Error('NotFound'))
+            })
         } else {
             return process.nextTick(function () {
-                callback(null, rec.value)
+                callback(null, {value: rec.value, meta})
             });
         }
     });
@@ -50,7 +58,7 @@ AerospikeLevelDOWN.prototype._get = function (key, options, callback) {
 AerospikeLevelDOWN.prototype._del = function (key, options, callback) {
     var aero_key = aerospike.key('test','demo','_' + key);
 
-    client.remove(aero_key, function (err, key) {
+    this._client.remove(aero_key, function (err, key) {
         if (err.code !== status.AEROSPIKE_OK) {
             console.log("error %s",err.message);
         }

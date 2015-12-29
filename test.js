@@ -7,6 +7,14 @@ var test = require('tape')
     , AbstractIterator = require('./').AbstractIterator
     , AbstractChainedBatch = require('./').AbstractChainedBatch
     , isLevelDOWN = require('./').isLevelDOWN
+    , levelup = require('levelup')
+    , leveldowndb = levelup('/who/cares/', {
+        db: function (location) {
+            return new AerospikeLevelDOWN(location)
+        },
+        address: '127.0.0.1',
+        port: 3000
+    });
 
 function factory(location) {
     return new AerospikeLevelDOWN(location)
@@ -51,18 +59,35 @@ require('./abstract/iterator-test').sequence(test)
 
 /*** actual aerospike test ***/
 
-test('test file can be put and retrieved (full acceptance test)', function(t) {
-    var levelup = require('levelup');
-    var db = levelup('/who/cares/', {
-        db: function (location) {
-            return new AerospikeLevelDOWN(location)
-        },
-        address: '127.0.0.1',
-        port: 3000
+test('test data can be put and retrieved (full acceptance test)', function(t) {
+    leveldowndb.put('example', '123', function (err) {
+        leveldowndb.get('example', function (err, result) {
+            t.equal(result.value, '123', 'the expected db value is returned');
+            t.end()
+        })
     });
-    db.put('example', '123', function (err) {
-        db.get('example', function (err, value) {
-            t.equal('123', value)
+});
+
+test('test data can be saved and deleted (full acceptance' + ' test)', function(t) {
+    leveldowndb.put('example', '123', function (err) {
+        leveldowndb.del('example', function (err, result) {
+            t.equal(result, undefined, 'the value does not exist anymore');
+            t.end()
+        })
+    });
+});
+
+
+test('test meta data with regular data can be put and retrieved (full acceptance test)', function(t) {
+    leveldowndb.put('test', '123', {ttl: 123789, gen: 2}, function (err) {
+        leveldowndb.get('test', function (err, result) {
+            t.equal(result.value, '123', 'the expected db value is returned');
+            t.true(result.meta.ttl < 123789, 'the ttl is smaller than the'
+                + ' initial ttl given (since it lived already)');
+            t.true(result.meta.ttl > 123000, 'the ttl is in a realistic'
+                + ' range based on the ttl given');
+            t.false(isNaN(result.meta.gen), 'the generation exists and is a'
+                + ' number');
             t.end()
         })
     });
@@ -82,7 +107,7 @@ test('test core extensibility', function(t) {
 
     ;
     new Test('foobar')
-})
+});
 
 test('test open() extensibility', function(t) {
     var spy = sinon.spy()
