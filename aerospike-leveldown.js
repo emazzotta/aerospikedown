@@ -12,7 +12,7 @@ util.inherits(AerospikeLevelDOWN, AbstractLevelDOWN);
 
 AerospikeLevelDOWN.prototype._open = function (options, callback) {
     this._client = aerospike.client({
-        hosts: [ { addr: '127.0.0.1', port: 3000 } ]
+        hosts: [ { addr: options.address, port: options.port } ]
     });
     function connect_cb(err, client) {
         if (err.code == status.AEROSPIKE_OK) {

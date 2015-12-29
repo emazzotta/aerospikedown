@@ -28,8 +28,8 @@ AbstractLevelDOWN.prototype.open = function (options, callback) {
   if (typeof options != 'object')
     options = {}
 
-  options.createIfMissing = options.createIfMissing != false
-  options.errorIfExists = !!options.errorIfExists
+  options.address = '127.0.0.1'
+  options.port = 3000
 
   if (typeof this._open == 'function') {
     this.status = 'opening'
