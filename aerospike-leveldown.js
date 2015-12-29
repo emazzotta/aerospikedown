@@ -3,29 +3,30 @@ var status = aerospike.status;
 var util = require('util');
 var AbstractLevelDOWN = require('./').AbstractLevelDOWN;
 
-// constructor, passes through the 'location' argument to the AbstractLevelDOWN constructor
 function AerospikeLevelDOWN (location) {
     AbstractLevelDOWN.call(this, location)
 }
-// our new prototype inherits from AbstractLevelDOWN
 util.inherits(AerospikeLevelDOWN, AbstractLevelDOWN);
 
-AerospikeLevelDOWN.prototype._open = function (options, callback) {
-    this._client = aerospike.client({
-        hosts: [ { addr: options.address, port: options.port } ]
-    });
-    function connect_cb(err, client) {
-        if (err.code == status.AEROSPIKE_OK) {
-            console.log("Aerospike Connection Success")
-        }
+function getAeroKey(key, options) {
+    if(options.namespace == undefined) {
+        process.nextTick(function () {
+            callback(new Error('Missing namespace option - '
+                + 'where should I'
+                + ' save the data?'))
+        })
     }
-    this._client.connect(connect_cb);
-    process.nextTick(function () { callback(null, this) }.bind(this))
-};
+    if(options.set == undefined) {
+        process.nextTick(function () {
+            callback(new Error('Missing set option - where in '
+                + options.namespace + ' '
+                + 'should I save the data?'))
+        })
+    }
+    return aerospike.key(options.namespace, options.set,'_' + key);
+}
 
-AerospikeLevelDOWN.prototype._put = function (key, value, options, callback) {
-    var aero_key = aerospike.key('test','demo','_' + key);
-    var bins = {'value': value};
+function getMetaData(options) {
     var metadata = {};
     if(options.ttl != undefined) {
         metadata.ttl = options.ttl;
@@ -33,17 +34,40 @@ AerospikeLevelDOWN.prototype._put = function (key, value, options, callback) {
     if(options.gen != undefined) {
         metadata.gen = options.gen
     }
+    return metadata
+}
 
-    this._client.put(aero_key, bins, metadata, function(err, key){
+AerospikeLevelDOWN.prototype._open = function (options, callback) {
+    this._client = aerospike.client({
+        hosts: [{
+                addr: options.address,
+                port: options.port
+        }]
     });
+    function connect_cb(err, client) {
+        if (err.code !== status.AEROSPIKE_OK) {
+            process.nextTick(function () {
+                callback(new Error('Failed to open db, aerospike says: ' + err.message))
+            })
+        }
+    }
+    this._client.connect(connect_cb);
+    process.nextTick(function () { callback(null, this) }.bind(this))
+};
+
+AerospikeLevelDOWN.prototype._put = function (key, value, options, callback) {
+    this._client.put(
+        getAeroKey(key, options),
+        {'value': value},
+        getMetaData(options),
+        function(err, key){}
+    );
     process.nextTick(callback)
 };
 
 AerospikeLevelDOWN.prototype._get = function (key, options, callback) {
-    var aero_key = aerospike.key('test','demo','_' + key);
-
-    this._client.get(aero_key, function(err, rec, meta) {
-        if ( err.code != status.AEROSPIKE_OK ) {
+    this._client.get(getAeroKey(key, options), function(err, rec, meta) {
+        if (err.code !== status.AEROSPIKE_OK ) {
             return process.nextTick(function () {
                 callback(new Error('NotFound'))
             })
@@ -56,14 +80,14 @@ AerospikeLevelDOWN.prototype._get = function (key, options, callback) {
 };
 
 AerospikeLevelDOWN.prototype._del = function (key, options, callback) {
-    var aero_key = aerospike.key('test','demo','_' + key);
-
-    this._client.remove(aero_key, function (err, key) {
+    this._client.remove(getAeroKey(key, options), function (err, key) {
         if (err.code !== status.AEROSPIKE_OK) {
-            console.log("error %s",err.message);
+            return process.nextTick(function () {
+                callback(new Error('Could not remove %s', key))
+            })
         }
         process.nextTick(callback)
     });
 };
 
-module.exports = AerospikeLevelDOWN
+module.exports = AerospikeLevelDOWN;

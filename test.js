@@ -60,8 +60,8 @@ require('./abstract/iterator-test').sequence(test)
 /*** actual aerospike test ***/
 
 test('test data can be put and retrieved (full acceptance test)', function(t) {
-    leveldowndb.put('example', '123', function (err) {
-        leveldowndb.get('example', function (err, result) {
+    leveldowndb.put('example', '123', {namespace: 'test', set: 'demo'}, function (err) {
+        leveldowndb.get('example', {namespace: 'test', set: 'demo'}, function (err, result) {
             t.equal(result.value, '123', 'the expected db value is returned');
             t.end()
         })
@@ -69,8 +69,8 @@ test('test data can be put and retrieved (full acceptance test)', function(t) {
 });
 
 test('test data can be saved and deleted (full acceptance' + ' test)', function(t) {
-    leveldowndb.put('example', '123', function (err) {
-        leveldowndb.del('example', function (err, result) {
+    leveldowndb.put('example', '123', {namespace: 'test', set: 'demo'}, function (err) {
+        leveldowndb.del('example', {namespace: 'test', set: 'demo'}, function (err, result) {
             t.equal(result, undefined, 'the value does not exist anymore');
             t.end()
         })
@@ -79,8 +79,8 @@ test('test data can be saved and deleted (full acceptance' + ' test)', function(
 
 
 test('test meta data with regular data can be put and retrieved (full acceptance test)', function(t) {
-    leveldowndb.put('test', '123', {ttl: 123789, gen: 2}, function (err) {
-        leveldowndb.get('test', function (err, result) {
+    leveldowndb.put('test', '123', {namespace: 'test', set: 'demo_set', ttl: 123789, gen: 2}, function (err) {
+        leveldowndb.get('test', {namespace: 'test', set: 'demo_set'}, function (err, result) {
             t.equal(result.value, '123', 'the expected db value is returned');
             t.true(result.meta.ttl < 123789, 'the ttl is smaller than the'
                 + ' initial ttl given (since it lived already)');
