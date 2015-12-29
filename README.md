@@ -1,16 +1,22 @@
 # Aerospikedown
 A LevelDOWN API compatible Aerospike adapter for LevelUP
 
-The goal is to have an abstraction layer for the database so that it could
-easily get replaced with a different database.
+The goal is to have an abstraction layer for aerospike
+so that it could easily get replaced with a different database.
 
 For more info see:
 * [LevelUp](https://github.com/Level/levelup)
 * [LevelDown](https://github.com/Level/leveldown) / [AbstractLevelDown](https://github.com/Level/abstract-leveldown)
 
+# Installation
+
+```sh
+npm install aerospike-leveldown
+```
+
 # How to Use
 
-The LevelUp package will be needed for this to work.
+The LevelUp package will be needed for this example to work.
 
 Example:
 
@@ -42,11 +48,6 @@ db.put('foo', 'bar', databaseOptions, function (err) {
 });
 ```
 
-## Todo
-
-* Adapt tests
-* Handle the meta data (time-to-live, genreration)
-
 # Author
 
-[Emanuele Mazzotta](mailto:emanuele.mazzotta@siroop.ch?Subject=Aerospikedown&body=Hi Emanuele,)
+[Emanuele Mazzotta](mailto:emanuele.mazzotta@siroop.ch?Subject=Aerospikedown&body=Hi Emanuele)
