@@ -1,4 +1,9 @@
 # Aerospikedown
+
+[![npm version](https://badge.fury.io/js/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
+[![npm version](https://img.shields.io/npm/dm/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
+[![npm version](https://img.shields.io/npm/dt/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
+
 A LevelDOWN API compatible Aerospike adapter for LevelUP
 
 The goal is to have an abstraction layer for aerospike
