@@ -29,6 +29,8 @@ Example:
 var AerospikeLevelDOWN = require('aerospike-leveldown').AerospikeLevelDOWN;
 var levelup = require('levelup');
 
+// the address and port are relevant to be passed to level up (as can be seen below) 
+// whereas namespace and set will be used on every db operation
 var databaseOptions = {
     address: '127.0.0.1',
     port: 3000,
@@ -55,4 +57,4 @@ db.put('foo', 'bar', databaseOptions, function (err) {
 
 # Author
 
-[Emanuele Mazzotta](mailto:emanuele.mazzotta@siroop.ch?Subject=Aerospikedown&body=Hi Emanuele)
+[Emanuele Mazzotta](mailto:emanuele.mazzotta@siroop.ch)
