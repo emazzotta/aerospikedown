@@ -21,7 +21,7 @@ npm install aerospike-leveldown --save
 # How to Use
 
 ```js
-var AerospikeLevelDOWN = require('./aerospike-leveldown');
+var AerospikeLevelDOWN = require('aerospike-leveldown');
 var levelup = require('levelup');
 
 var db = levelup('/who/cares/', {
