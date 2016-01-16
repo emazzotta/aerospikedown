@@ -15,7 +15,7 @@ For more info see:
 # Installation
 
 ```sh
-npm install aerospike-leveldown
+npm install aerospike-leveldown --save
 ```
 
 # How to Use
