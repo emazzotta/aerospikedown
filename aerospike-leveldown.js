@@ -1,7 +1,7 @@
 var aerospike = require('aerospike');
 var status = aerospike.status;
 var util = require('util');
-var AbstractLevelDOWN = require('./').AbstractLevelDOWN;
+var AbstractLevelDOWN = require('abstract-leveldown').AbstractLevelDOWN;
 
 function AerospikeLevelDOWN (location) {
     AbstractLevelDOWN.call(this, location)

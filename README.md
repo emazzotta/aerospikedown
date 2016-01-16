@@ -6,8 +6,7 @@
 
 A LevelDOWN API compatible Aerospike adapter for LevelUP
 
-The goal is to have an abstraction layer for aerospike
-so that it could easily get replaced with a different database.
+This is an implementation of the abstraction layer for aerospike.
 
 For more info see:
 * [LevelUp](https://github.com/Level/levelup)
@@ -21,34 +20,28 @@ npm install aerospike-leveldown
 
 # How to Use
 
-The LevelUp package will be needed for this example to work.
-
-Example:
-
 ```js
-var AerospikeLevelDOWN = require('aerospike-leveldown').AerospikeLevelDOWN;
+var AerospikeLevelDOWN = require('./aerospike-leveldown');
 var levelup = require('levelup');
-
-// the address and port are relevant to be passed to level up (as can be seen below) 
-// whereas namespace and set will be used on every db operation
-var databaseOptions = {
-    address: '127.0.0.1',
-    port: 3000,
-    namespace: 'test',
-    set: 'anything'
-};
 
 var db = levelup('/who/cares/', {
     db: function (location) {
         return new AerospikeLevelDOWN(location)
     },
-    address: databaseOptions.address,
-    port: databaseOptions.port
+    address: '127.0.0.1',
+    port: 3000
 });
 
-db.put('foo', 'bar', databaseOptions, function (err) {
+// Namespace and set will be needed on every db operation
+// in order to know where to save data and where to retrieve it from
+var namespace_and_set = {
+    namespace: 'test',
+    set: 'anything'
+};
+
+db.put('foo', 'bar', namespace_and_set, function (err) {
     if (err) throw err;
-    db.get('foo', databaseOptions, function (err, result) {
+    db.get('foo', namespace_and_set, function (err, result) {
         if (err) throw err;
         console.log('Got foo =', result.value)
     })
