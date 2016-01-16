@@ -6,8 +6,6 @@
 
 A LevelDOWN API compatible Aerospike adapter for LevelUP
 
-This is an implementation of the abstraction layer for aerospike.
-
 For more info see:
 * [LevelUp](https://github.com/Level/levelup)
 * [LevelDown](https://github.com/Level/leveldown) / [AbstractLevelDown](https://github.com/Level/abstract-leveldown)
