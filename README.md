@@ -12,13 +12,13 @@ For more info see:
 * [LevelUp](https://github.com/Level/levelup)
 * [LevelDown](https://github.com/Level/leveldown) / [AbstractLevelDown](https://github.com/Level/abstract-leveldown)
 
-# Installation
+## Installation
 
 ```sh
 npm install aerospike-leveldown --save
 ```
 
-# How to Use
+## How to Use
 
 ```js
 var AerospikeLevelDOWN = require('aerospike-leveldown');
@@ -48,6 +48,10 @@ db.put('foo', 'bar', namespace_and_set, function (err) {
 });
 ```
 
-# Author
+## Author
 
 [Emanuele Mazzotta](mailto:emanuele.mazzotta@siroop.ch)
+
+## License
+
+See the [LICENSE](LICENSE.md) file for license rights and limitations (MIT).
