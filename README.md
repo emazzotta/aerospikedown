@@ -16,7 +16,7 @@ For more info see:
 npm install aerospike-leveldown --save
 ```
 
-## How to Use
+## Usage 
 
 ```js
 var AerospikeLevelDOWN = require('aerospike-leveldown');
