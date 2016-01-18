@@ -6,7 +6,7 @@
 
 [![npm version](https://img.shields.io/npm/dt/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
 
-[![siroop.ch](./img/siroop.svg)](https://siroop.ch)
+[![siroop.ch](img/siroop.svg)](https://siroop.ch)
 
 This project was developed at [siroop.ch](https://siroop.ch)
 
