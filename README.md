@@ -6,6 +6,7 @@
 [![Downloads Month](https://img.shields.io/npm/dm/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
 
 Developed at [siroop.ch](https://siroop.ch) with ♥ 
+
 [![siroop.ch](https://rawgit.com/ProjectThor/aerospikedown/master/img/siroop.svg)](https://siroop.ch)
 
 This is a LevelDOWN API compatible Aerospike adapter for LevelUP.
