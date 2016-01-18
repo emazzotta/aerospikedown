@@ -1,12 +1,11 @@
 # Aerospikedown
 
 [![NPM Version](https://badge.fury.io/js/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
-[![Downloads Month](https://img.shields.io/npm/dm/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
-[![Downloads Today](https://img.shields.io/npm/dt/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
 [![Dependency Status](https://david-dm.org/ProjectThor/aerospikedown.svg)](https://david-dm.org/ProjectThor/aerospikedown)
+[![Downloads Today](https://img.shields.io/npm/dt/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
+[![Downloads Month](https://img.shields.io/npm/dm/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
 
-This project was developed at [siroop.ch](https://siroop.ch)
-
+Developed at [siroop.ch](https://siroop.ch) with ♥ 
 [![siroop.ch](https://rawgit.com/ProjectThor/aerospikedown/master/img/siroop.svg)](https://siroop.ch)
 
 This is a LevelDOWN API compatible Aerospike adapter for LevelUP.
@@ -37,7 +36,7 @@ var db = levelup('/who/cares/', {
 });
 
 // Namespace and set will be needed on every db operation
-// in order to know where to save data and where to retrieve it from
+// It indicates where to save data and where to retrieve data from
 var namespace_and_set = {
     namespace: 'test',
     set: 'anything'
