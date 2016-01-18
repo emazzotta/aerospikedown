@@ -1,24 +1,31 @@
 # Aerospikedown
 
 [![npm version](https://badge.fury.io/js/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
+
 [![npm version](https://img.shields.io/npm/dm/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
+
 [![npm version](https://img.shields.io/npm/dt/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
 
-A LevelDOWN API compatible Aerospike adapter for LevelUP
+[![siroop.ch](./img/siroop.svg)](https://siroop.ch)
 
-For more info see:
+This project was developed at [siroop.ch](https://siroop.ch)
+
+It's a LevelDOWN API compatible Aerospike adapter for LevelUP.
+
+For more information about Level, see:
+
 * [LevelUp](https://github.com/Level/levelup)
 * [LevelDown](https://github.com/Level/leveldown) / [AbstractLevelDown](https://github.com/Level/abstract-leveldown)
 
 ## Installation
 
-```sh
+``` sh
 npm install aerospike-leveldown --save
 ```
 
-## Usage 
+## Usage
 
-```js
+``` js
 var AerospikeLevelDOWN = require('aerospike-leveldown');
 var levelup = require('levelup');
 
