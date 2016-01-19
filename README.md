@@ -25,29 +25,37 @@ npm install aerospike-leveldown --save
 ## Usage
 
 ``` js
-var AerospikeLevelDOWN = require('aerospike-leveldown');
-var levelup = require('levelup');
+'use strict';
 
-var db = levelup('/who/cares/', {
+let AerospikeLevelDOWN = require('aerospike-leveldown');
+let levelup = require('levelup');
+ 
+let db = levelup('/who/cares/', {
     db: function (location) {
         return new AerospikeLevelDOWN(location)
     },
     address: '127.0.0.1',
     port: 3000
 });
-
-// Namespace and set will be needed on every db operation
-// It indicates where to save data and where to retrieve data from
-var namespace_and_set = {
+ 
+// Namespace and set will be needed on every database operation 
+// It indicates where to save data and where to retrieve data from 
+let namespace_and_set = {
     namespace: 'test',
     set: 'anything'
 };
-
+ 
+// Save value bar with key foo in defined namespace and set
 db.put('foo', 'bar', namespace_and_set, function (err) {
     if (err) throw err;
+    // Get value from key foo in defined namespace and set
     db.get('foo', namespace_and_set, function (err, result) {
         if (err) throw err;
         console.log('Got foo =', result.value)
+        // Delete key foo and its value in defined namespace and set
+        db.del('foo', namespace_and_set, function (err) {
+            if (err) throw err;
+        })
     })
 });
 ```
