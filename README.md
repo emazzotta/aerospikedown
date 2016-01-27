@@ -2,6 +2,7 @@
 
 [![NPM Version](https://badge.fury.io/js/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
 [![Dependency Status](https://david-dm.org/ProjectThor/aerospikedown.svg)](https://david-dm.org/ProjectThor/aerospikedown)
+[![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 [![Downloads Today](https://img.shields.io/npm/dt/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
 [![Downloads Month](https://img.shields.io/npm/dm/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
 
