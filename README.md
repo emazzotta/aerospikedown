@@ -1,8 +1,7 @@
 # Aerospikedown
 
-[![NPM Version](https://badge.fury.io/js/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
-[![Dependency Status](https://david-dm.org/ProjectThor/aerospikedown.svg)](https://david-dm.org/ProjectThor/aerospikedown)
 [![Downloads Today](https://img.shields.io/npm/dt/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown)
+[![Dependency Status](https://david-dm.org/ProjectThor/aerospikedown.svg)](https://david-dm.org/ProjectThor/aerospikedown)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 [![Developed At](https://img.shields.io/badge/developed%20with%20♥%20at-siroop-blue.svg)](https://siroop.ch/)
 
