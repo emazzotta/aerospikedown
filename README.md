@@ -5,7 +5,7 @@
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 [![Developed At](https://img.shields.io/badge/developed%20with%20♥%20at-siroop-blue.svg)](https://siroop.ch/)
 
-[![siroop.ch](https://rawgit.com/ProjectThor/aerospikedown/master/img/siroop.svg)](https://siroop.ch)
+[![siroop.ch](https://rawgit.com/ProjectThor/aerospikedown/master/img/siroop.png)](https://siroop.ch)
 
 This is a LevelDOWN API compatible Aerospike adapter for LevelUP.
 
