@@ -1,7 +1,7 @@
 {
     "name": "aerospike-leveldown",
     "description": "An aerospike implementation of the abstract prototype matching the LevelDOWN API",
-    "version": "1.0.22",
+    "version": "1.0.23",
     "contributors": [
         "Emanuele Mazzotta <hello@mazzotta.me> (https://github.com/emazzotta)"
     ],

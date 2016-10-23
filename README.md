@@ -1,4 +1,4 @@
-# Aerospikedown [![Downloads Today](https://img.shields.io/npm/dt/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown) [![Code Climate](https://codeclimate.com/github/ProjectThor/aerospikedown/badges/gpa.svg)](https://codeclimate.com/github/ProjectThor/aerospikedown) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org) [![Developed At](https://img.shields.io/badge/developed%20with%20♥%20at-siroop-red.svg)](https://siroop.ch/)
+# Aerospikedown [![Downloads Today](https://img.shields.io/npm/dt/aerospike-leveldown.svg)](https://badge.fury.io/js/aerospike-leveldown) [![Code Climate](https://codeclimate.com/github/ProjectThor/aerospikedown/badges/gpa.svg)](https://codeclimate.com/github/ProjectThor/aerospikedown) [![Dev Dependencies](https://david-dm.org/ProjectThor/aerospikedown.svg)](https://github.com/ProjectThor/aerospikedown) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org) [![Developed At](https://img.shields.io/badge/developed%20with%20♥%20at-siroop-red.svg)](https://siroop.ch/)
 
 This is a LevelDOWN API compatible Aerospike adapter for LevelUP.
 
