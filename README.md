@@ -1,4 +1,8 @@
-[![Downloads Today](https://img.shields.io/npm/dt/aerospike-leveldown.svg?style=flat-square)](https://badge.fury.io/js/aerospike-leveldown) [![Code Climate](https://codeclimate.com/github/ProjectThor/aerospikedown/badges/gpa.svg?style=flat-square)](https://codeclimate.com/github/ProjectThor/aerospikedown) [![Dev Dependencies](https://david-dm.org/ProjectThor/aerospikedown.svg?style=flat-square)](https://github.com/ProjectThor/aerospikedown) [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://doge.mit-license.org) [![Developed At](https://img.shields.io/badge/developed%20with%20♥%20at-siroop-red.svg?style=flat-square)](https://siroop.ch/)
+[![Downloads Today](https://img.shields.io/npm/dt/aerospike-leveldown.svg?style=flat)](https://badge.fury.io/js/aerospike-leveldown)
+[![Code Climate](https://codeclimate.com/github/ProjectThor/aerospikedown/badges/gpa.svg?style=flat)](https://codeclimate.com/github/ProjectThor/aerospikedown)
+[![Dev Dependencies](https://david-dm.org/ProjectThor/aerospikedown.svg?style=flat)](https://david-dm.org/ProjectThor/aerospikedown)
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat)](LICENSE.md) 
+[![Developed At](https://img.shields.io/badge/developed%20with%20♥%20at-siroop-red.svg?style=flat)](https://siroop.ch/)
 
 # Aerospikedown 
 
