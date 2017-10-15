@@ -2,7 +2,6 @@
 [![Code Climate](https://codeclimate.com/github/ProjectThor/aerospikedown/badges/gpa.svg?style=flat)](https://codeclimate.com/github/ProjectThor/aerospikedown)
 [![Dev Dependencies](https://david-dm.org/ProjectThor/aerospikedown.svg?style=flat)](https://david-dm.org/ProjectThor/aerospikedown)
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat)](LICENSE.md) 
-[![Developed At](https://img.shields.io/badge/developed%20with%20♥%20at-siroop-red.svg?style=flat)](https://siroop.ch/)
 
 # Aerospikedown 
 
