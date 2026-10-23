@@ -20,7 +20,7 @@
     ],
     "main": "index.js",
     "dependencies": {
-        "abstract-leveldown": "^7.0.0",
+        "abstract-leveldown": "^2.7.1",
         "aerospike": "^3.0.1",
         "levelup": "^2.0.0"
     },
