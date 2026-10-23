@@ -22,7 +22,7 @@
     "dependencies": {
         "abstract-leveldown": "^2.7.1",
         "aerospike": "^3.0.1",
-        "levelup": "^2.0.0"
+        "levelup": "^5.0.0"
     },
     "license": "MIT",
     "author": "Emanuele Mazzotta",
